@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "go-chi-restsvc.fullname" . }}-test-connection"
+  labels:
+    {{- include "go-chi-restsvc.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "go-chi-restsvc.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
